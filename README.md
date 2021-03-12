@@ -1,7 +1,6 @@
 # publictext
 [ucspi-tcp](http://cr.yp.to/ucspi-tcp.html "UNIX Client-Server Program Interface for TCP") [text://protocol](https://textprotocol.org "TEXT://PROTOCOL") [server](http://cr.yp.to/ucspi-tcp/tcpserver.html "tcpserver")
 
-
 ```bash
 # echo -e 'text://txt.textprotocol.org/\r\n' | nc txt.textprotocol.org 1961
 20 text/plain; charset=utf-8
@@ -16,6 +15,11 @@ Hello text://protocol! ✌︎
 ```
 
 ```bash
+openssl s_client -quiet -crlf -connect txt.textprotocol.org:1965 <<< text://txt.textprotocol.org/ 2>/dev/null | head -1
+20 text/plain; charset=utf-8
+```
+
+```bash
 # echo -e 'gemini://txt.textprotocol.org/\r\n' | nc txt.textprotocol.org 1961
 20 text/plain; charset=utf-8
 Hello gemini://protocol! ✌︎
@@ -26,4 +30,9 @@ Hello gemini://protocol! ✌︎
 => gemini://txt.textprotocol.org/license.txt rel=license CC0-1.0
 => gemini://txt.textprotocol.org/pgp.asc rel=pgpkey
 => gemini://txt.textprotocol.org/robots.txt rel=robots
+```
+
+```bash
+openssl s_client -quiet -crlf -connect txt.textprotocol.org:1965 <<< gemini://txt.textprotocol.org/ 2>/dev/null | head -1
+20 text/plain; charset=utf-8
 ```
