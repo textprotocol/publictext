@@ -32,7 +32,7 @@
 # ../../bin/publictext <<< 'text://' 1>/dev/null
 - - - [11/Mar/2021:11:11:11 +0000] "text://" 20 234
 
-# tcpserver -v -c42 -o -D -H -P -l 0 -R 0.0.0.0 1961 timeout 1 ../../bin/publictext
+# tcpserver -v -c42 -o -D -H -P -l 0 -R 127.0.0.1 1961 timeout 1 ../../bin/publictext
 
 # echo -e 'text://127.0.0.1/\r\n' | nc 127.0.0.1 1961 | head -1
 20 text/plain; charset=utf-8
@@ -51,6 +51,8 @@ local tostring = tostring
 
 local EOL = '\r\n'
 local SP = ' '
+
+local MAP = { text = 'txt', gemini = 'gmi' }
 
 local function STATUS( aStatus, aDescription )
   local aStatus = assert( tonumber( aStatus ) )
@@ -117,11 +119,11 @@ local aCall = function()
   local aScheme = aRequest:match( '^(%l+)' )
         assert( aScheme )
         assert( 0 ~= aScheme:len() )
-        assert( 4 >= aScheme:len() )
+        assert( 6 >= aScheme:len() )
         assert( aScheme == aScheme:lower() )
-        assert( aScheme == 'text' )
+        assert( MAP[ aScheme ] )
   local aName, anExtension = aRequest:match( '/([%w-]+)%.(%w+)$' )
-        if '/' ==  aRequest:sub( -1, -1 ) then aName = 'index' anExtension = 'txt' end
+        if '/' ==  aRequest:sub( -1, -1 ) then aName = 'index' anExtension = MAP[ aScheme ] end
         assert( aName )
         assert( 0 ~= aName:len() )
         assert( 128 >= aName:len() )
@@ -129,7 +131,7 @@ local aCall = function()
         assert( aName == aName:lower() )
         assert( anExtension )
         assert( 0 ~= anExtension:len() )
-        assert( 3 >= anExtension:len() )
+        assert( 6 >= anExtension:len() )
         assert( anExtension == anExtension:lower() )
   local aFileName = ( '%s.%s' ):format( aName, anExtension )
   local aType = assert( TYPE( aFileName ) )
@@ -151,5 +153,3 @@ if not pcall( aCall ) then
   NOK()
   LOG( aRequest, 40 )
 end
-
-
