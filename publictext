@@ -32,7 +32,7 @@
 # ../../bin/publictext <<< 'text://' 1>/dev/null
 - - - [11/Mar/2021:11:11:11 +0000] "text://" 20 234
 
-# tcpserver -v -c42 -O -d -h -p -R 127.0.0.1 1961 timeout 1 ../../bin/publictext
+# tcpserver -v -c42 -o -D -H -P -l 0 -R 0.0.0.0 1961 timeout 1 ../../bin/publictext
 
 # echo -e 'text://127.0.0.1/\r\n' | nc 127.0.0.1 1961 | head -1
 20 text/plain; charset=utf-8
