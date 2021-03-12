@@ -3,7 +3,7 @@
 
 
 ```bash
-# echo -e 'text://txt.textprotocol.org/\r\n' | nc 165.22.70.231 1961
+# echo -e 'text://txt.textprotocol.org/\r\n' | nc txt.textprotocol.org 1961
 20 text/plain; charset=utf-8
 Hello text://protocol! ✌︎
 
