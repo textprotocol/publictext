@@ -19,7 +19,7 @@
         └── robots.txt
 
 # wc -l bin/publictext
-     156 bin/publictext
+     155 bin/publictext
 
 # head -1 bin/publictext
 #!/usr/bin/env lua
@@ -30,7 +30,7 @@
 20 text/plain; charset=utf-8
 
 # ../../bin/publictext <<< 'text://' 1>/dev/null
-- - - [12/Mar/2021:10:04:39 +0100] "text://" 20 234
+- - - [11/Mar/2021:11:11:11 +0000] "text://" 20 234
 
 # tcpserver -v -c42 -O -d -h -p -R 127.0.0.1 1961 timeout 1 ../../bin/publictext
 
@@ -84,7 +84,6 @@ local function TYPE( aFileName )
   return aType
 end
 
-
 local function LOG( aRequest, aStatus, aSize )
   local aBuffer = {}
 
@@ -134,7 +133,7 @@ local aCall = function()
         assert( anExtension == anExtension:lower() )
   local aFileName = ( '%s.%s' ):format( aName, anExtension )
   local aType = assert( TYPE( aFileName ) )
-  local aFile = assert( io.open( aFileName, 'r' ) )
+  local aFile = assert( io.open( aFileName, 'rb' ) )
   local aSize = assert( aFile:seek( 'end' ) )
         assert( aFile:seek( 'set' ) )
 
