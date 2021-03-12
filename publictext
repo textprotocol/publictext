@@ -1,0 +1,156 @@
+#!/usr/bin/env lua
+
+--[[
+#
+# publictext: ucspi-tcp text://protocol server
+#
+
+# tree --noreport
+.
+├── bin
+│   └── publictext
+├── etc
+└── var
+    ├── log
+    └── txt
+        ├── icon.png
+        ├── index.txt
+        ├── license.txt
+        └── robots.txt
+
+# wc -l bin/publictext
+     156 bin/publictext
+
+# head -1 bin/publictext
+#!/usr/bin/env lua
+
+# cd var/txt
+
+# ../../bin/publictext <<< 'text://' 2>/dev/null | head -1
+20 text/plain; charset=utf-8
+
+# ../../bin/publictext <<< 'text://' 1>/dev/null
+- - - [12/Mar/2021:10:04:39 +0100] "text://" 20 234
+
+# tcpserver -v -c42 -O -d -h -p -R 127.0.0.1 1961 timeout 1 ../../bin/publictext
+
+# echo -e 'text://127.0.0.1/\r\n' | nc 127.0.0.1 1961 | head -1
+20 text/plain; charset=utf-8
+
+# echo -e 'text://127.0.0.1/foobarbaz\r\n' | nc 127.0.0.1 1961 | head -1
+40 NOK
+]]--
+
+local assert = assert
+local io = require( 'io' )
+local os = require( 'os' )
+local pcall = pcall
+local table = require( 'table' )
+local tonumber = tonumber
+local tostring = tostring
+
+local EOL = '\r\n'
+local SP = ' '
+
+local function STATUS( aStatus, aDescription )
+  local aStatus = assert( tonumber( aStatus ) )
+
+  assert( aDescription )
+  assert( 0 ~= aDescription:len() )
+  assert( not aDescription:find( '%c' ) )
+
+  io.stdout:write( aStatus, SP, aDescription, EOL )
+end
+
+local function OK( aType )
+  STATUS( 20, assert( aType ) )
+end
+
+local function NOK( aDescription )
+  STATUS( 40, aDescription or 'NOK' )
+end
+
+local function QUOTE( anArgument )
+  return ( '\'%s\'' ):format( assert( anArgument ):gsub( '\\',  '\\\\' ):gsub( '\'',  "'\\''" ) )
+end
+
+local function TYPE( aFileName )
+  local aCommand = ( 'file --brief --mime-type --mime-encoding %s 2>/dev/null' ):format( assert( QUOTE( aFileName ) ) )
+  local aHandle = assert( io.popen( aCommand, 'r' ) )
+  local aType = assert( aHandle:read() )
+
+  assert( aHandle:close() )
+
+  return aType
+end
+
+
+local function LOG( aRequest, aStatus, aSize )
+  local aBuffer = {}
+
+  aBuffer[ #aBuffer + 1 ] = os.getenv( 'TCPREMOTEHOST' ) or os.getenv( 'TCPREMOTEIP' ) or '-' -- remotehost
+  aBuffer[ #aBuffer + 1 ] = os.getenv( 'TCPREMOTEINFO' ) or '-' -- rfc931
+  aBuffer[ #aBuffer + 1 ] = '-' -- authuser
+  aBuffer[ #aBuffer + 1 ] = ( '[%s]' ):format( os.date( '%d/%b/%Y:%H:%M:%S %z' ) ) -- [date]
+  aBuffer[ #aBuffer + 1 ] = ( '%q' ):format( aRequest ) -- "request"
+  aBuffer[ #aBuffer + 1 ] = tostring( aStatus or '-' ) -- status
+  aBuffer[ #aBuffer + 1 ] = tostring( aSize or '0' ) -- bytes
+
+  io.stderr:write( table.concat( aBuffer, ' ' ), '\n' )
+end
+
+local function CHUNK( aFile )
+  return function()
+    return aFile:read( 4096 )
+  end
+end
+
+local aRequest = nil
+local aCall = function()
+        aRequest = assert( io.stdin:read() )
+        assert( aRequest )
+        aRequest = aRequest:match( '^([^%c]+)' )
+        assert( 0 ~= aRequest:len() )
+        assert( 1024 >= aRequest:len() )
+        assert( aRequest == aRequest:lower() )
+        assert( not aRequest:find( '%c' ) )
+        assert( not aRequest:find( '%s' ) )
+  local aScheme = aRequest:match( '^(%l+)' )
+        assert( aScheme )
+        assert( 0 ~= aScheme:len() )
+        assert( 4 >= aScheme:len() )
+        assert( aScheme == aScheme:lower() )
+        assert( aScheme == 'text' )
+  local aName, anExtension = aRequest:match( '/([%w-]+)%.(%w+)$' )
+        if '/' ==  aRequest:sub( -1, -1 ) then aName = 'index' anExtension = 'txt' end
+        assert( aName )
+        assert( 0 ~= aName:len() )
+        assert( 128 >= aName:len() )
+        assert( '.' ~= aName:sub( 1, 1 ) )
+        assert( aName == aName:lower() )
+        assert( anExtension )
+        assert( 0 ~= anExtension:len() )
+        assert( 3 >= anExtension:len() )
+        assert( anExtension == anExtension:lower() )
+  local aFileName = ( '%s.%s' ):format( aName, anExtension )
+  local aType = assert( TYPE( aFileName ) )
+  local aFile = assert( io.open( aFileName, 'r' ) )
+  local aSize = assert( aFile:seek( 'end' ) )
+        assert( aFile:seek( 'set' ) )
+
+  OK( aType )
+  LOG( aRequest, 20, aSize )
+
+  for aChunk in CHUNK( aFile ) do
+    io.stdout:write( aChunk )
+  end
+
+  aFile:close()
+end
+
+if not pcall( aCall ) then
+  NOK()
+  LOG( aRequest, 40 )
+end
+
+
