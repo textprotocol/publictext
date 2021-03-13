@@ -13,8 +13,3 @@ Hello text://protocol! ✌︎
 => text://txt.textprotocol.org/pgp.asc rel=pgpkey
 => text://txt.textprotocol.org/robots.txt rel=robots
 ```
-
-```bash
-# openssl s_client -quiet -crlf -connect txt.textprotocol.org:1965 <<< text://txt.textprotocol.org/ 2>/dev/null | head -1
-20 text/plain; charset=utf-8
-```
