@@ -15,6 +15,6 @@ Hello text://protocol! ✌︎
 ```
 
 ```bash
-openssl s_client -quiet -crlf -connect txt.textprotocol.org:1965 <<< text://txt.textprotocol.org/ 2>/dev/null | head -1
+# openssl s_client -quiet -crlf -connect txt.textprotocol.org:1965 <<< text://txt.textprotocol.org/ 2>/dev/null | head -1
 20 text/plain; charset=utf-8
 ```
