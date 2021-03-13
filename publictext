@@ -52,7 +52,7 @@ local tostring = tostring
 local EOL = '\r\n'
 local SP = ' '
 
-local MAP = { text = 'txt', gemini = 'gmi' }
+local MAP = { text = 'txt' }
 
 local function STATUS( aStatus, aDescription )
   local aStatus = assert( tonumber( aStatus ) )
