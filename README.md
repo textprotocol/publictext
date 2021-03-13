@@ -1,5 +1,5 @@
-# publictext
-[ucspi-tcp](http://cr.yp.to/ucspi-tcp.html "UNIX Client-Server Program Interface for TCP") [text://protocol](https://textprotocol.org "TEXT://PROTOCOL") [server](http://cr.yp.to/ucspi-tcp/tcpserver.html "tcpserver")
+# PUBLICTEXT
+[UCSPI-TCP](http://cr.yp.to/ucspi-tcp.html "UNIX Client-Server Program Interface for TCP") [TEXT://PROTOCOL](https://textprotocol.org "TEXT://PROTOCOL") [server](http://cr.yp.to/ucspi-tcp/tcpserver.html "tcpserver")
 
 ```bash
 # echo -e 'text://txt.textprotocol.org/\r\n' | nc txt.textprotocol.org 1961
