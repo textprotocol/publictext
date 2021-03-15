@@ -16,10 +16,10 @@ local table = require( 'table' )
 local tonumber = tonumber
 local tostring = tostring
 
+_ENV = nil
+
 local EOL = '\r\n'
 local SP = ' '
-
-_ENV = nil
 
 local _request = nil
 
