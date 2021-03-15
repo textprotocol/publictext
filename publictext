@@ -1,11 +1,9 @@
 #!/usr/bin/env lua
 
---[[
-#
-# publictext
-# ucspi-tcp text://protocol server
-#
-]]--
+--
+-- publictext
+-- ucspi-tcp text://protocol server
+--
 
 local assert = assert
 local io = require( 'io' )
