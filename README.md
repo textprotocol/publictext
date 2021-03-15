@@ -3,7 +3,8 @@
 
 ```bash
 #
-# publictext: ucspi-tcp text://protocol server
+# publictext
+# ucspi-tcp text://protocol server
 #
 
 # tree
