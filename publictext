@@ -53,9 +53,7 @@ local function STATUS( aStatus, aDescription )
 end
 
 local function CHUNK( aFile )
-  return function()
-    return aFile:read( 4096 )
-  end
+  return function() return aFile:read( 4096 ) end
 end
 
 local function OK( aFile, aType, aSize )
