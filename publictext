@@ -9,6 +9,7 @@
 
 local assert = assert
 local io = require( 'io' )
+local ipairs = ipairs
 local os = require( 'os' )
 local pcall = pcall
 local table = require( 'table' )
@@ -17,6 +18,8 @@ local tostring = tostring
 
 local EOL = '\r\n'
 local SP = ' '
+
+_ENV = nil
 
 local _request = nil
 
