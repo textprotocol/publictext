@@ -79,7 +79,6 @@ end
 local function REDIRECT()
   STATUS( 30, REQUEST() )
   LOG( 30 )
-
   os.exit( true )
 end
 
