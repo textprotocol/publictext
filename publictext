@@ -150,6 +150,4 @@ local function HANDLE()
   OK( aFile, aType, aSize )
 end
 
-if not pcall( HANDLE ) then
-  NOK()
-end
+if not pcall( HANDLE ) then NOK() end
