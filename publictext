@@ -57,14 +57,10 @@ local function CHUNK( aFile )
 end
 
 local function OK( aFile, aType, aSize )
-  assert( aFile )
-  assert( aSize )
-  assert( aType )
+  STATUS( 20, assert( aType ) )
+  LOG( 20, assert( aSize ) )
 
-  STATUS( 20, aType )
-  LOG( 20, aSize )
-
-  for aChunk in CHUNK( aFile ) do
+  for aChunk in CHUNK( assert( aFile ) ) do
     io.stdout:write( aChunk )
   end
 
