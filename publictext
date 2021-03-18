@@ -127,13 +127,12 @@ end
 local function HANDLE()
   local aRequest = REQUEST()
         assert( aRequest )
-        aRequest = REQUEST( aRequest:match( '^([^%c]+)' ) )
+        aRequest = assert( REQUEST( aRequest:match( '^([^%c]+)' ) ) )
         assert( 0 ~= aRequest:len() )
         assert( 1024 >= aRequest:len() )
         assert( not aRequest:find( '%s' ) )
         assert( aRequest == aRequest:lower() )
-  local aScheme = aRequest:match( '^(%l+)' )
-        assert( aScheme == 'text' )
+        assert( 'text://' == aRequest:sub( 1, 7 ) )
   local aName, anExtension = aRequest:match( '/([%w-]+)%.(%w+)$' )
         if '/' ==  aRequest:sub( -1, -1 ) then aName = 'index' anExtension = 'txt' end
         if not aName then REQUEST( ( '%s/' ):format( aRequest ) ) REDIRECT() end
