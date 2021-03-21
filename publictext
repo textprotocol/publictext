@@ -68,9 +68,9 @@ local function OK( aFile, aType, aSize )
   os.exit( true )
 end
 
-local function REDIRECT()
-  STATUS( 30, REQUEST() )
+local function REDIRECT( aLocation )
   LOG( 30 )
+  STATUS( 30, aLocation )
   os.exit( true )
 end
 
@@ -83,9 +83,10 @@ end
 local function LINK( aFile, aType )
   if aType ~= '.lnk' then return end
 
-  REQUEST( assert( aFile:read():match( '^([^%c]+)' ) ) )
+  local aLocation = assert( aFile:read():match( '^([^%c]+)' ) )
   assert( aFile:close() )
-  REDIRECT()
+
+  REDIRECT( aLocation )
 end
 
 local function QUOTE( anArgument )
@@ -131,7 +132,7 @@ local function HANDLE()
         assert( 'text://' == aRequest:sub( 1, 7 ) )
   local aName, anExtension = aRequest:match( '/([%w-]+)%.(%w+)$' )
         if '/' ==  aRequest:sub( -1, -1 ) then aName = 'index' anExtension = 'txt' end
-        if not aName then REQUEST( ( '%s/' ):format( aRequest ) ) REDIRECT() end
+        if not aName then REDIRECT( ( '%s/' ):format( aRequest ) ) end
         assert( aName )
         assert( 0 ~= aName:len() )
         assert( 128 >= aName:len() )
