@@ -37,7 +37,7 @@
 # curl -s telnet://127.0.0.1:1961 <<< 'text://127.0.0.1'
 30 text://127.0.0.1/
 
-# curl -s telnet://127.0.0.1:1961 <<< 'text://127.0.0.1/foobar.baz'
+# curl -s telnet://127.0.0.1:1961 <<< 'text://127.0.0.1/foo.bar'
 40 NOK
 ```
 
