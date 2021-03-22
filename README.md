@@ -31,18 +31,18 @@
 
 # tcpserver -v -c42 -o -D -H -P -l 0 -R 127.0.0.1 1961 timeout 1 ../../bin/publictext
 
-# echo -e 'text://127.0.0.1/\r\n' | nc 127.0.0.1 1961 | head -1
+# curl -s telnet://127.0.0.1:1961 <<< 'text://127.0.0.1/' | head -1
 20 text/plain; charset=utf-8
 
-# echo -e 'text://127.0.0.1\r\n' | nc 127.0.0.1 1961
+# curl -s telnet://127.0.0.1:1961 <<< 'text://127.0.0.1'
 30 text://127.0.0.1/
 
-# echo -e 'text://127.0.0.1/foobar.baz\r\n' | nc 127.0.0.1 1961 | head -1
+# curl -s telnet://127.0.0.1:1961 <<< 'text://127.0.0.1/foobar.baz'
 40 NOK
 ```
 
 ```bash
-# echo -e 'text://txt.textprotocol.org/\r\n' | nc txt.textprotocol.org 1961
+# curl -s telnet://txt.textprotocol.org:1961 <<< 'text://txt.textprotocol.org/'
 20 text/plain; charset=utf-8
 TEXT://PROTOCOL
 
