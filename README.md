@@ -31,18 +31,18 @@
 
 # tcpserver -v -c42 -o -D -H -P -l 0 -R 127.0.0.1 1961 timeout 1 ../../bin/publictext
 
-# printf 'text://127.0.0.1/\r\n' | nc 127.0.0.1 1961 | head -1
+# nc -C 127.0.0.1 1961 <<< 'text://127.0.0.1/' | head -1
 20 text/plain; charset=utf-8
 
-# printf 'text://127.0.0.1\r\n' | nc 127.0.0.1 1961
+# nc -C 127.0.0.1 1961 <<< 'text://127.0.0.1'
 30 text://127.0.0.1/
 
-# printf 'text://127.0.0.1/foo.bar\r\n' | nc 127.0.0.1 1961
+# nc -C 127.0.0.1 1961 <<< 'text://127.0.0.1/foo.bar'
 40 NOK
 ```
 
 ```bash
-# printf 'text://txt.textprotocol.org/\r\n' | nc txt.textprotocol.org 1961
+# nc -C txt.textprotocol.org 1961 <<< 'text://txt.textprotocol.org/'
 20 text/plain; charset=utf-8
 TEXT://PROTOCOL
 

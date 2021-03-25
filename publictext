@@ -83,14 +83,14 @@ end
 local function LINK( aFile, aType )
   if aType ~= '.lnk' then return end
 
-  local aLocation = assert( aFile:read():match( '^([^%c]+)' ) )
+  local aLocation = assert( aFile:read():match( '^(%C+)' ) )
   assert( aFile:close() )
 
   REDIRECT( aLocation )
 end
 
 local function QUOTE( anArgument )
-  return ( '\'%s\'' ):format( assert( anArgument ):gsub( '\\',  '\\\\' ):gsub( '\'',  "'\\''" ) )
+  return ( "'%s'" ):format( assert( anArgument ):gsub( "'", "'\\''" ) )
 end
 
 local function TYPE( aFileName )
@@ -124,7 +124,7 @@ end
 local function HANDLE()
   local aRequest = REQUEST()
         assert( aRequest )
-        aRequest = assert( REQUEST( aRequest:match( '^([^%c]+)' ) ) )
+        aRequest = assert( REQUEST( aRequest:match( '^(%C+)' ) ) )
         assert( 0 ~= aRequest:len() )
         assert( 1024 >= aRequest:len() )
         assert( not aRequest:find( '%s' ) )
