@@ -22,7 +22,7 @@ local SP = ' '
 local _request = nil
 
 local function REQUEST( aRequest )
-  _request = aRequest or _request or assert( io.stdin:read() )
+  _request = aRequest or _request or io.stdin:read() or os.exit( false )
 
   return _request
 end
