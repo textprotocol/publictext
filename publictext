@@ -69,8 +69,8 @@ local function OK( aFile, aType, aSize )
 end
 
 local function REDIRECT( aLocation )
-  LOG( 30 )
   STATUS( 30, aLocation )
+  LOG( 30 )
   os.exit( true )
 end
 
