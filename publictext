@@ -33,7 +33,7 @@ local function LOG( aStatus, aSize )
   aBuffer[ #aBuffer + 1 ] = os.getenv( 'TCPREMOTEHOST' ) or os.getenv( 'TCPREMOTEIP' ) or '-' -- remotehost
   aBuffer[ #aBuffer + 1 ] = os.getenv( 'TCPREMOTEINFO' ) or '-' -- rfc931
   aBuffer[ #aBuffer + 1 ] = '-' -- authuser
-  aBuffer[ #aBuffer + 1 ] = ( '[%s]' ):format( os.date( '%d/%b/%Y:%H:%M:%S %z' ) ) -- [date]
+  aBuffer[ #aBuffer + 1 ] = ( '[%s]' ):format( os.date( '!%Y-%m-%dT%TZ' ) ) -- [date]
   aBuffer[ #aBuffer + 1 ] = ( '%q' ):format( REQUEST() or '' ) -- "request"
   aBuffer[ #aBuffer + 1 ] = tostring( aStatus or '-' ) -- status
   aBuffer[ #aBuffer + 1 ] = tostring( aSize or '0' ) -- bytes
@@ -50,6 +50,7 @@ local function STATUS( aStatus, aDescription )
   assert( not aDescription:find( '%c' ) )
 
   io.stdout:write( aStatus, SP, aDescription, EOL )
+  io.stdout:flush()
 end
 
 local function CHUNK( aFile )
@@ -62,6 +63,7 @@ local function OK( aFile, aType, aSize )
 
   for aChunk in CHUNK( assert( aFile ) ) do
     io.stdout:write( aChunk )
+    io.stdout:flush()
   end
 
   aFile:close()
